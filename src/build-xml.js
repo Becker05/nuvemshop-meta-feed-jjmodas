@@ -12,6 +12,9 @@ function escapeXml(value = "") {
 
 function itemToXml(item) {
   const currency = process.env.CURRENCY || "BRL";
+  const productTypeLines = Array.isArray(item.productTypes) && item.productTypes.length > 0
+    ? item.productTypes.map((t) => `<g:product_type>${escapeXml(t)}</g:product_type>`).join("\n      ")
+    : "";
 
   return `
     <item>
@@ -26,6 +29,7 @@ function itemToXml(item) {
       <g:image_link>${escapeXml(item.imageLink)}</g:image_link>
       <g:brand>${escapeXml(item.brand || "")}</g:brand>
       ${item.itemGroupId ? `<g:item_group_id>${escapeXml(item.itemGroupId)}</g:item_group_id>` : ""}
+      ${productTypeLines}
     </item>
   `.trim();
 }

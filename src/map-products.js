@@ -177,11 +177,19 @@ function getBrand(product) {
   );
 }
 
+function getProductTypes(product) {
+  if (!Array.isArray(product.categories) || product.categories.length === 0) return [];
+  return product.categories
+    .map((cat) => getLocalizedValue(cat.name))
+    .filter(Boolean);
+}
+
 function buildBaseItem(product) {
   const name = getLocalizedValue(product.name);
   const description = buildDescription(product, name);
   const link = buildProductUrl(product.handle);
   const brand = getBrand(product);
+  const productTypes = getProductTypes(product);
 
   return {
     productId: String(product.id),
@@ -190,7 +198,8 @@ function buildBaseItem(product) {
     link,
     brand,
     condition: "new",
-    itemGroupId: String(product.id)
+    itemGroupId: String(product.id),
+    productTypes
   };
 }
 
@@ -214,7 +223,8 @@ function mapSimpleProduct(product, baseItem) {
     imageLink,
     additionalImageLinks,
     brand: baseItem.brand,
-    itemGroupId: null
+    itemGroupId: null,
+    productTypes: baseItem.productTypes
   };
 }
 
@@ -240,7 +250,8 @@ function mapVariantProduct(product, baseItem, variant) {
     imageLink,
     additionalImageLinks,
     brand: baseItem.brand,
-    itemGroupId: baseItem.itemGroupId
+    itemGroupId: baseItem.itemGroupId,
+    productTypes: baseItem.productTypes
   };
 }
 
