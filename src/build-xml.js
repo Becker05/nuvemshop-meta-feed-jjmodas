@@ -13,7 +13,7 @@ function escapeXml(value = "") {
 function itemToXml(item) {
   const currency = process.env.CURRENCY || "BRL";
   const productTypeLines = Array.isArray(item.productTypes) && item.productTypes.length > 0
-    ? item.productTypes.map((t) => `<g:product_type>${escapeXml(t)}</g:product_type>`).join("\n      ")
+    ? `<g:product_type>${escapeXml(item.productTypes.join(", "))}</g:product_type>`
     : "";
 
   return `

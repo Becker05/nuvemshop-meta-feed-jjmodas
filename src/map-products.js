@@ -180,7 +180,7 @@ function getBrand(product) {
 function getProductTypes(product) {
   if (!Array.isArray(product.categories) || product.categories.length === 0) return [];
   return product.categories
-    .map((cat) => getLocalizedValue(cat.name))
+    .map((cat) => getLocalizedValue(cat.name).trim())
     .filter(Boolean);
 }
 
