@@ -148,6 +148,20 @@ function buildVariantTitle(productName, variant) {
     : productName;
 }
 
+function getVariantSize(product, variant) {
+  if (!Array.isArray(product.attributes) || !Array.isArray(variant?.values)) return null;
+
+  const sizeIndex = product.attributes.findIndex((attribute) => {
+    const names = typeof attribute === "string"
+      ? [attribute]
+      : Object.values(attribute || {}).filter((value) => typeof value === "string");
+    return names.some((name) => /tamanho|tamaño|talla|talle|\bsize\b/i.test(name));
+  });
+
+  if (sizeIndex === -1) return null;
+  return getLocalizedValue(variant.values[sizeIndex]).trim() || null;
+}
+
 function buildDescription(product, productName) {
   const description = stripHtml(
     getLocalizedValue(
@@ -241,6 +255,7 @@ function mapVariantProduct(product, baseItem, variant) {
   return {
     id: String(variantId ?? `${product.id}-variant`),
     title: buildVariantTitle(baseItem.title, variant),
+    size: getVariantSize(product, variant),
     description: baseItem.description,
     availability: normalizeAvailability(stock),
     condition: baseItem.condition,
